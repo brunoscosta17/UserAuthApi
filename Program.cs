@@ -57,6 +57,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+// CORS deve vir antes de qualquer coisa que envolva requisição
+app.UseCors("AllowAll");
+
+// Middleware para tratar OPTIONS (pré-flight)
 app.Use(async (context, next) =>
 {
     if (context.Request.Method == "OPTIONS")
@@ -72,8 +76,6 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseCors("AllowAll");
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -82,6 +84,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 using (var scope = app.Services.CreateScope())
 {
     try
