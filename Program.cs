@@ -60,22 +60,6 @@ var app = builder.Build();
 // CORS deve vir antes de qualquer coisa que envolva requisição
 app.UseCors("AllowAll");
 
-// Middleware para tratar OPTIONS (pré-flight)
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.Headers["Access-Control-Allow-Origin"] = "*";
-        context.Response.Headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS";
-        context.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization";
-        context.Response.StatusCode = 204;
-        await context.Response.CompleteAsync();
-        return;
-    }
-
-    await next();
-});
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
